@@ -29,9 +29,9 @@ OQS_KEM *OQS_KEM_{{ family }}_{{ scheme['scheme'] }}_new() {
 	return kem;
 }
 
-int PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_keypair(unsigned char *pk, unsigned char *sk);
-int PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_enc(unsigned char *ct, unsigned char *ss, const unsigned char *pk);
-int PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_dec(unsigned char *ss, const unsigned char *ct, const unsigned char *sk);
+int PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_keypair(uint8_t *pk, uint8_t *sk);
+int PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_enc(uint8_t *ct, uint8_t *ss, const uint8_t *pk);
+int PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_dec(uint8_t *ss, const uint8_t *ct, const uint8_t *sk);
 
 OQS_API OQS_STATUS OQS_KEM_{{ family }}_{{ scheme['scheme'] }}_keypair(uint8_t *public_key, uint8_t *secret_key) {
 	return (OQS_STATUS) PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_keypair(public_key, secret_key);
@@ -39,7 +39,7 @@ OQS_API OQS_STATUS OQS_KEM_{{ family }}_{{ scheme['scheme'] }}_keypair(uint8_t *
 OQS_API OQS_STATUS OQS_KEM_{{ family }}_{{ scheme['scheme'] }}_encaps(uint8_t *ciphertext, uint8_t *shared_secret, const uint8_t *public_key) {
 	return (OQS_STATUS) PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_enc(ciphertext, shared_secret, public_key);
 }
-OQS_API OQS_STATUS OQS_KEM_{{ family }}_{{ scheme['scheme'] }}_decaps(uint8_t *shared_secret, const unsigned char *ciphertext, const uint8_t *secret_key) {
+OQS_API OQS_STATUS OQS_KEM_{{ family }}_{{ scheme['scheme'] }}_decaps(uint8_t *shared_secret, const uint8_t *ciphertext, const uint8_t *secret_key) {
 	return (OQS_STATUS) PQCLEAN_{{ scheme['pqclean_scheme_c']|upper }}_{{ scheme['implementation']|upper }}_crypto_kem_dec(shared_secret, ciphertext, secret_key);
 }
 
