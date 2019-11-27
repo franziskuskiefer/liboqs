@@ -7,6 +7,7 @@
 //
 
 #include <assert.h>
+#include <stdint.h>
 #include <string.h>
 
 #include <oqs/common.h>
@@ -20,13 +21,13 @@
 #endif
 
 typedef struct {
-	unsigned char Key[32];
-	unsigned char V[16];
+	uint8_t Key[32];
+	uint8_t V[16];
 	int reseed_counter;
 } AES256_CTR_DRBG_struct;
 
 static AES256_CTR_DRBG_struct DRBG_ctx;
-static void AES256_CTR_DRBG_Update(unsigned char *provided_data, unsigned char *Key, unsigned char *V);
+static void AES256_CTR_DRBG_Update(uint8_t *provided_data, uint8_t *Key, uint8_t *V);
 
 #ifdef USE_OPENSSL
 static void handleErrors(void) {
@@ -39,7 +40,7 @@ static void handleErrors(void) {
 //    key - 256-bit AES key
 //    ctr - a 128-bit plaintext value
 //    buffer - a 128-bit ciphertext value
-static void AES256_ECB(unsigned char *key, unsigned char *ctr, unsigned char *buffer) {
+static void AES256_ECB(uint8_t *key, uint8_t *ctr, uint8_t *buffer) {
 #ifdef USE_OPENSSL
 	EVP_CIPHER_CTX *ctx;
 
@@ -65,8 +66,8 @@ static void AES256_ECB(unsigned char *key, unsigned char *ctr, unsigned char *bu
 #endif
 }
 
-OQS_API void OQS_randombytes_nist_kat_init(unsigned char *entropy_input, unsigned char *personalization_string, int security_strength) {
-	unsigned char seed_material[48];
+OQS_API void OQS_randombytes_nist_kat_init(uint8_t *entropy_input, uint8_t *personalization_string, int security_strength) {
+	uint8_t seed_material[48];
 
 	assert(security_strength == 256);
 	memcpy(seed_material, entropy_input, 48);
@@ -79,8 +80,8 @@ OQS_API void OQS_randombytes_nist_kat_init(unsigned char *entropy_input, unsigne
 	DRBG_ctx.reseed_counter = 1;
 }
 
-void OQS_randombytes_nist_kat(unsigned char *x, size_t xlen) {
-	unsigned char block[16];
+void OQS_randombytes_nist_kat(uint8_t *x, size_t xlen) {
+	uint8_t block[16];
 	int i = 0;
 
 	while (xlen > 0) {
@@ -107,8 +108,8 @@ void OQS_randombytes_nist_kat(unsigned char *x, size_t xlen) {
 	DRBG_ctx.reseed_counter++;
 }
 
-static void AES256_CTR_DRBG_Update(unsigned char *provided_data, unsigned char *Key, unsigned char *V) {
-	unsigned char temp[48];
+static void AES256_CTR_DRBG_Update(uint8_t *provided_data, uint8_t *Key, uint8_t *V) {
+	uint8_t temp[48];
 
 	for (int i = 0; i < 3; i++) {
 		//increment V

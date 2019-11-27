@@ -7,7 +7,7 @@
 #define NROUNDS 24
 #define ROL(a, offset) ((a << offset) ^ (a >> (64 - offset)))
 
-static uint64_t load64(const unsigned char *x) {
+static uint64_t load64(const uint8_t *x) {
 	unsigned long long r = 0, i;
 
 	for (i = 0; i < 8; ++i) {
@@ -29,13 +29,13 @@ static void store64(uint8_t *x, uint64_t u) {
 #include "keccak4x/KeccakP-1600-times4-SIMD256.c"
 #define KeccakF1600_StatePermute4x KeccakP1600times4_PermuteAll_24rounds
 
-static void keccak_absorb4x(__m256i *s, unsigned int r, const unsigned char *m0, const unsigned char *m1, const unsigned char *m2, const unsigned char *m3,
-                            unsigned long long int mlen, unsigned char p) {
+static void keccak_absorb4x(__m256i *s, unsigned int r, const uint8_t *m0, const uint8_t *m1, const uint8_t *m2, const uint8_t *m3,
+                            unsigned long long int mlen, uint8_t p) {
 	unsigned long long i;
-	unsigned char t0[200];
-	unsigned char t1[200];
-	unsigned char t2[200];
-	unsigned char t3[200];
+	uint8_t t0[200];
+	uint8_t t1[200];
+	uint8_t t2[200];
+	uint8_t t3[200];
 	unsigned long long *ss = (unsigned long long *) s;
 
 	while (mlen >= r) {
@@ -85,7 +85,7 @@ static void keccak_absorb4x(__m256i *s, unsigned int r, const unsigned char *m0,
 	}
 }
 
-static void keccak_squeezeblocks4x(unsigned char *h0, unsigned char *h1, unsigned char *h2, unsigned char *h3, unsigned long long int nblocks, __m256i *s, unsigned int r) {
+static void keccak_squeezeblocks4x(uint8_t *h0, uint8_t *h1, uint8_t *h2, uint8_t *h3, unsigned long long int nblocks, __m256i *s, unsigned int r) {
 	unsigned int i;
 	unsigned long long *ss = (unsigned long long *) s;
 
@@ -107,7 +107,7 @@ static void keccak_squeezeblocks4x(unsigned char *h0, unsigned char *h1, unsigne
 
 /********** SHAKE128 ***********/
 
-static void shake128_absorb4x(__m256i *s, const unsigned char *in0, const unsigned char *in1, const unsigned char *in2, const unsigned char *in3, unsigned long long inlen) {
+static void shake128_absorb4x(__m256i *s, const uint8_t *in0, const uint8_t *in1, const uint8_t *in2, const uint8_t *in3, unsigned long long inlen) {
 	unsigned int i;
 
 	for (i = 0; i < 25; i++)
@@ -118,13 +118,13 @@ static void shake128_absorb4x(__m256i *s, const unsigned char *in0, const unsign
 }
 
 /* N is assumed to be empty; S is assumed to have at most 2 characters */
-void OQS_SHA3_shake128_4x(unsigned char *output0, unsigned char *output1, unsigned char *output2, unsigned char *output3, unsigned long long outlen,
-                          const unsigned char *in0, const unsigned char *in1, const unsigned char *in2, const unsigned char *in3, unsigned long long inlen) {
+void OQS_SHA3_shake128_4x(uint8_t *output0, uint8_t *output1, uint8_t *output2, uint8_t *output3, unsigned long long outlen,
+                          const uint8_t *in0, const uint8_t *in1, const uint8_t *in2, const uint8_t *in3, unsigned long long inlen) {
 	__m256i s[25];
-	unsigned char t0[SHAKE128_RATE];
-	unsigned char t1[SHAKE128_RATE];
-	unsigned char t2[SHAKE128_RATE];
-	unsigned char t3[SHAKE128_RATE];
+	uint8_t t0[SHAKE128_RATE];
+	uint8_t t1[SHAKE128_RATE];
+	uint8_t t2[SHAKE128_RATE];
+	uint8_t t3[SHAKE128_RATE];
 	unsigned int i;
 
 	shake128_absorb4x(s, in0, in1, in2, in3, inlen);
@@ -149,8 +149,8 @@ void OQS_SHA3_shake128_4x(unsigned char *output0, unsigned char *output1, unsign
 
 /********** cSHAKE128 ***********/
 
-static void cshake128_simple_absorb4x(__m256i *s, uint16_t cstm0, uint16_t cstm1, uint16_t cstm2, uint16_t cstm3, const unsigned char *in, unsigned long long inlen) {
-	unsigned char *sep = (unsigned char *) s;
+static void cshake128_simple_absorb4x(__m256i *s, uint16_t cstm0, uint16_t cstm1, uint16_t cstm2, uint16_t cstm3, const uint8_t *in, unsigned long long inlen) {
+	uint8_t *sep = (uint8_t *) s;
 	unsigned int i;
 
 	for (i = 0; i < 25; i++)
@@ -181,13 +181,13 @@ static void cshake128_simple_absorb4x(__m256i *s, uint16_t cstm0, uint16_t cstm1
 }
 
 /* N is assumed to be empty; S is assumed to have at most 2 characters */
-void OQS_SHA3_cshake128_simple4x(unsigned char *output0, unsigned char *output1, unsigned char *output2, unsigned char *output3, unsigned long long outlen,
-                                 uint16_t cstm0, uint16_t cstm1, uint16_t cstm2, uint16_t cstm3, const unsigned char *in, unsigned long long inlen) {
+void OQS_SHA3_cshake128_simple4x(uint8_t *output0, uint8_t *output1, uint8_t *output2, uint8_t *output3, unsigned long long outlen,
+                                 uint16_t cstm0, uint16_t cstm1, uint16_t cstm2, uint16_t cstm3, const uint8_t *in, unsigned long long inlen) {
 	__m256i s[25];
-	unsigned char t0[SHAKE128_RATE];
-	unsigned char t1[SHAKE128_RATE];
-	unsigned char t2[SHAKE128_RATE];
-	unsigned char t3[SHAKE128_RATE];
+	uint8_t t0[SHAKE128_RATE];
+	uint8_t t1[SHAKE128_RATE];
+	uint8_t t2[SHAKE128_RATE];
+	uint8_t t3[SHAKE128_RATE];
 	unsigned int i;
 
 	cshake128_simple_absorb4x(s, cstm0, cstm1, cstm2, cstm3, in, inlen);

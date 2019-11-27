@@ -15,6 +15,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 /* Simplified for liboqs: remove code that wasn't used in shake128_4x */
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +32,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #error Expecting a little-endian platform
 #endif
 
-typedef unsigned char UINT8;
+typedef uint8_t UINT8;
 typedef unsigned long long int UINT64;
 typedef __m128i V128;
 typedef __m256i V256;

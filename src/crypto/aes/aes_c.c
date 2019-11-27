@@ -8,13 +8,14 @@
 // This code is public domain, or any OSI-approved license, your choice. No warranty.
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "aes.h"
 #include <oqs/common.h>
 
-typedef unsigned char byte;
+typedef uint8_t byte;
 
 // Here are all the lookup tables for the row shifts, rcon, s-boxes, and galois field multiplications
 static const byte shift_rows_table[] = {0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11};
