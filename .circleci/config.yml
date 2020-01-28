@@ -166,6 +166,7 @@ workflows:
       - ubuntu-xenial-x86_64-gcc8-noopenssl
       - ubuntu-xenial-x86_64-gcc8-noshared
       - ubuntu-bionic-x86_64-gcc7
+      - osx
   nightly:
     triggers:
       - schedule:
